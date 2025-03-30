@@ -1,31 +1,17 @@
 return {
-    --- @param palette VSCodeModernPalette
-    --- @param config VSCodeModernConfig
-    --- @return VSCodeModernThemeDark
+    --- @param palette VimDefaultModernPalette
+    --- @param config VimDefaultModernConfig
+    --- @return VimDefaultModernThemeDark
     dark = function(palette, config)
-        local background = palette.none_1
-        local statusline_bg = palette.none_1
+        local background = palette.none
+        local statusline_bg = palette.none
 
-        if
-            config.custom_dark_background ~= nil
-            and type(config.custom_dark_background) == 'string'
-        then
-            background = palette.none_1
-        end
-
-        if
-            config.custom_statusline_dark_background ~= nil
-            and type(config.custom_statusline_dark_background)
-        then
-            statusline_bg = palette.none_1
-        end
-
-        --- @class VSCodeModernThemeDark
+        --- @class VimDefaultModernThemeDark
         local theme = {
             palette = palette,
             ui = {
                 bg = background,
-                bg_darker_01 = palette.none_1,
+                bg_darker_01 = palette.none,
                 fg = palette.light_07,
                 cursor = {
                     bg = palette.light_03,
@@ -102,8 +88,7 @@ return {
                     fg = palette.grey_08,
                 },
                 win_separator = {
-                    fg = config.transparent_background and palette.grey_08
-                        or palette.dark_02,
+                    fg = palette.grey_08,
                 },
                 pmenu = {
                     bg = palette.grey_05,
@@ -263,20 +248,13 @@ return {
         return theme
     end,
 
-    --- @param palette VSCodeModernPalette
-    --- @param config VSCodeModernConfig
-    --- @return VSCodeModernThemeLight
+    --- @param palette VimDefaultModernPalette
+    --- @param config VimDefaultModernConfig
+    --- @return VimDefaultModernThemeLight
     light = function(palette, config)
-        local background = palette.light_17
+        local background = palette.none
 
-        if
-            config.custom_light_background ~= nil
-            and type(config.custom_light_background) == 'string'
-        then
-            background = config.custom_light_background
-        end
-
-        --- @class VSCodeModernThemeLight
+        --- @class VimDefaultModernThemeLight
         local theme = {
             palette = palette,
             ui = {
@@ -324,7 +302,7 @@ return {
                     fg = palette.light_08,
                 },
                 status_line = {
-                    bg = palette.light_08,
+                    bg = palette.none,
                     fg = palette.grey_06,
                     medium = {
                         bg = palette.light_05,
@@ -393,10 +371,10 @@ return {
                         fg = palette.blue_04,
                     },
                     preview = {
-                        bg = palette.light_09,
+                        bg = palette.none,
                         border = {
-                            bg = palette.light_09,
-                            fg = palette.light_09,
+                            bg = palette.none,
+                            fg = palette.none,
                         },
                         title = {
                             bg = palette.blue_06,
@@ -404,11 +382,11 @@ return {
                         },
                     },
                     prompt = {
-                        bg = palette.light_08,
+                        bg = palette.none,
                         fg = palette.grey_06,
                         border = {
-                            bg = palette.light_08,
-                            fg = palette.light_08,
+                            bg = palette.none,
+                            fg = palette.none,
                         },
                         counter = {
                             fg = palette.grey_06,
@@ -419,10 +397,10 @@ return {
                         },
                     },
                     results = {
-                        bg = palette.light_06,
+                        bg = palette.none,
                         border = {
-                            bg = palette.light_06,
-                            fg = palette.light_06,
+                            bg = palette.none,
+                            fg = palette.none,
                         },
                         title = {
                             bg = palette.blue_06,
@@ -490,7 +468,7 @@ return {
                     text = palette.light_09,
                 },
                 inlay_hint = {
-                    bg = palette.light_16,
+                    bg = palette.none,
                     fg = palette.grey_23,
                 },
             },
@@ -517,4 +495,4 @@ return {
 
         return theme
     end,
-}
+} 

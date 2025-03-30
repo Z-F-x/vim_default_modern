@@ -1,1 +1,1 @@
-lua require("vscode_modern").load()
+lua require("vim_default_modern").load() 

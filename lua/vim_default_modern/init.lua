@@ -1,40 +1,35 @@
 local M = {}
 
---- @class VSCodeModernConfig
+--- @class VimDefaultModernConfig
 --- @field cursorline? boolean
 --- @field transparent_background? boolean
---- @field nvim_tree_darker? boolean
 --- @field undercurl? boolean
 --- @field italic_keyword? boolean
---- @field custom_dark_background? string
---- @field custom_light_background? string
---- @field custom_statusline_dark_background? string
 --- @field cache_path? string
 M.config = {
     cursorline = false,
-    transparent_background = true, -- Set this to true
-    nvim_tree_darker = false,
+    transparent_background = true, -- Always true for this theme
     undercurl = true,
     italic_keyword = false,
-    custom_dark_background = '#00000000',
-    custom_light_background = nil,
-    custom_statusline_dark_background = nil,
-    cache_path = vim.fn.stdpath 'cache' .. '/vscode_modern_theme/cache',
+    cache_path = vim.fn.stdpath('cache') .. '/vim_default_modern_theme/cache',
 }
 
---- @overload fun(config?: VSCodeModernConfig)
+--- @overload fun(config?: VimDefaultModernConfig)
 function M.setup(config)
     M.config = vim.tbl_deep_extend('force', M.config, config or {})
+    
+    -- Always ensure transparent background is true
+    M.config.transparent_background = true
 end
 
 local function compile_if_not_exist()
     if vim.fn.filereadable(M.config.cache_path) == 0 then
-        local palette = require 'vscode_modern.palette'
+        local palette = require('vim_default_modern.palette')
 
         local theme_dark =
-            require('vscode_modern.themes').dark(palette, M.config)
+            require('vim_default_modern.themes').dark(palette, M.config)
         local theme_light =
-            require('vscode_modern.themes').light(palette, M.config)
+            require('vim_default_modern.themes').light(palette, M.config)
 
         M.compile(M.config, theme_dark, theme_light)
     end
@@ -48,26 +43,26 @@ function M.load()
         f()
     else
         vim.notify(
-            '[vscode_modern_theme.nvim] error trying to load cache file',
+            '[vim_default_modern_theme.nvim] error trying to load cache file',
             vim.log.levels.ERROR
         )
     end
 end
 
---- @param config VSCodeModernConfig
---- @param theme_dark VSCodeModernThemeDark
---- @param theme_light VSCodeModernThemeLight
+--- @param config VimDefaultModernConfig
+--- @param theme_dark VimDefaultModernThemeDark
+--- @param theme_light VimDefaultModernThemeLight
 function M.compile(config, theme_dark, theme_light)
     local lines = {
-        string.format [[return string.dump(function()
+        string.format([[return string.dump(function()
 vim.cmd.highlight('clear')
-vim.g.colors_name="vscode_modern"
+vim.g.colors_name="vim_default_modern"
 local h=vim.api.nvim_set_hl
-vim.opt.termguicolors=true]],
+vim.opt.termguicolors=true]]),
     }
 
     table.insert(lines, 'if vim.o.background == \'dark\' then')
-    local hgs_dark = require('vscode_modern.hlgroups').get(config, theme_dark)
+    local hgs_dark = require('vim_default_modern.hlgroups').get(config, theme_dark)
     for group, color in pairs(hgs_dark) do
         table.insert(
             lines,
@@ -81,7 +76,7 @@ vim.opt.termguicolors=true]],
 
     table.insert(lines, 'else')
 
-    local hgs_light = require('vscode_modern.hlgroups').get(config, theme_light)
+    local hgs_light = require('vim_default_modern.hlgroups').get(config, theme_light)
     for group, color in pairs(hgs_light) do
         table.insert(
             lines,
@@ -96,7 +91,7 @@ vim.opt.termguicolors=true]],
 
     table.insert(lines, 'end,true)')
 
-    local cache_dir = vim.fn.stdpath 'cache' .. '/vscode_modern_theme/'
+    local cache_dir = vim.fn.stdpath('cache') .. '/vim_default_modern_theme/'
 
     if vim.fn.isdirectory(cache_dir) == 0 then
         vim.fn.mkdir(cache_dir, 'p')
@@ -104,11 +99,11 @@ vim.opt.termguicolors=true]],
 
     local f = loadstring(table.concat(lines, '\n'))
     if not f then
-        local path_debug_file = vim.fn.stdpath 'state'
-            .. '/vscode_modern_theme-debug.lua'
+        local path_debug_file = vim.fn.stdpath('state')
+            .. '/vim_default_modern_theme-debug.lua'
 
         local msg = string.format(
-            '[vscode_modern_theme.nvim] error, open %s for debugging',
+            '[vim_default_modern_theme.nvim] error, open %s for debugging',
             path_debug_file
         )
         vim.notify(msg, vim.log.levels.ERROR)
@@ -127,22 +122,22 @@ vim.opt.termguicolors=true]],
         file:close()
     else
         vim.notify(
-            '[vscode_modern_theme.nvim] error trying to open cache file',
+            '[vim_default_modern_theme.nvim] error trying to open cache file',
             vim.log.levels.ERROR
         )
     end
 end
 
-vim.api.nvim_create_user_command('VSCodeModernCompile', function()
-    local palette = require 'vscode_modern.palette'
+vim.api.nvim_create_user_command('VimDefaultModernCompile', function()
+    local palette = require('vim_default_modern.palette')
 
-    local theme_dark = require('vscode_modern.themes').dark(palette, M.config)
-    local theme_light = require('vscode_modern.themes').light(palette, M.config)
+    local theme_dark = require('vim_default_modern.themes').dark(palette, M.config)
+    local theme_light = require('vim_default_modern.themes').light(palette, M.config)
 
     M.compile(M.config, theme_dark, theme_light)
 
-    vim.notify '[vscode_modern.nvim] colorscheme compiled'
-    vim.cmd.colorscheme 'vscode_modern'
+    vim.notify('[vim_default_modern.nvim] colorscheme compiled')
+    vim.cmd.colorscheme('vim_default_modern')
 end, {})
 
-return M
+return M 
